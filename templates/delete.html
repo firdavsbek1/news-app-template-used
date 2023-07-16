@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Delete
+{% endblock title %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top:50vh;margin-bottom: 20vh">
+    <h2>Do you want to delete:"{{ news.title }}" ?</h2>
+        <form action="" method="post">{% csrf_token %}
+            <a class="btn btn-black" style="width: 200px;height:40px;border-radius: 5px;margin: 20px 10px 0 300px;font-size: 1.7rem" href="{% url 'news-detail' news.slug %}">Cancel</a>
+            <button type="submit" class="btn btn-danger" style="width: 200px;height:40px;border-radius: 5px;margin-top:23px;font-size: 1.7rem;">Delete</button>
+        </form>
+    </div>
+{% endblock content %}

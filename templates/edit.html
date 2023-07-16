@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if news %}
+       Edit
+        {% else %}
+        Create
+       {% endif %}
+{% endblock %}
+
+{% block content %}
+   <div class="container" style="padding:10px 50px;">
+   {% if news %}
+       <h2>Editing "{{ news.title }}"</h2>
+       {% endif %}
+       <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <button style="height: 40px;width: 100%;border-radius: 5px;" class="btn btn-primary" type="submit">Save Changes</button>
+    </form>
+
+   </div>
+{% endblock content %}

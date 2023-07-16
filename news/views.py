@@ -1,8 +1,10 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from django.views.generic import ListView
+from django.urls import reverse, reverse_lazy
+
 from .models import News,Category
 from django.views import generic
-from .forms import ContactModelForm
+from .forms import ContactModelForm,NewsModelForm
+from slugify import slugify
 
 
 # def news_list(request):
@@ -24,7 +26,7 @@ from .forms import ContactModelForm
 #     return render(request, 'news_list.html', context)
 
 
-class HomePageView(ListView):
+class HomePageView(generic.ListView):
     model = News
     template_name = 'news_list.html'
     context_object_name = 'news_list'
@@ -46,6 +48,33 @@ def show_category(request,category):
 
 def about_page(request):
     return render(request,'about.html')
+
+
+def delete_news(request,id):
+    news_item=News.objects.get(id=id)
+    if request.method == "POST":
+        news_item.delete()
+        return redirect('home-page')
+    context = {
+        'news':news_item,
+    }
+    return render(request,'delete.html',context)
+
+
+def edit_news(request,id):
+    news_item=News.objects.get(id=id)
+    if request.method=="POST":
+        form=NewsModelForm(request.POST,request.FILES,instance=news_item)
+        if form.is_valid():
+            news=form.save()
+            return redirect('news-detail',slug=news.slug)
+
+    form=NewsModelForm(instance=news_item)
+    context ={
+        'news':news_item,
+        'form':form
+    }
+    return render(request,'edit.html',context)
 
 
 def contact_page(request):
@@ -76,5 +105,25 @@ class NewsDetailView(generic.DetailView):
     context_object_name = 'news'
     pk_url_kwargs = 'slug'
 
-    def get_queryset(self):
-        return super().get_queryset().filter(status=News.Choice.ready_paper)
+    # def get_queryset(self):
+    #     return super().get_queryset().filter(self.model.slug=)
+
+
+class NewUpdateView(generic.UpdateView):
+    model = News
+    template_name = 'edit.html'
+    context_object_name = 'news'
+    form_class = NewsModelForm
+
+
+class NewsDeleteView(generic.DeleteView):
+    model = News
+    template_name = 'delete.html'
+    context_object_name = 'news'
+    success_url = reverse_lazy('home-page')
+
+
+class NewsCreateView(generic.CreateView):
+    model = News
+    template_name = 'edit.html'
+    form_class = NewsModelForm

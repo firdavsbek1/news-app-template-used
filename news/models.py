@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from slugify import slugify
 
 
 class ReadyManager(models.Manager):
@@ -26,12 +27,16 @@ class News(models.Model):
     image = models.ImageField(upload_to='news/images/')
     status = models.CharField(max_length=1, choices=Choice.choices, default=Choice.draft_paper)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    published_time = models.DateTimeField(default=timezone.now)
-    created_time = models.DateTimeField(auto_now_add=True)
-    updated_time = models.DateTimeField(auto_now=True)
+    published_time = models.DateTimeField(default=timezone.now,editable=False)
+    created_time = models.DateTimeField(auto_now_add=True,editable=False)
+    updated_time = models.DateTimeField(auto_now=True,editable=False)
 
     def __str__(self):
         return self.title
+
+    def save(self,*args,**kwargs):
+        self.slug=slugify(self.title)
+        return super().save(*args,**kwargs)
 
     def get_absolute_url(self):
         return reverse('news-detail', args=[self.slug])
