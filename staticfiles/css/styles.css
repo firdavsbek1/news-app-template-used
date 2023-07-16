@@ -1,0 +1,13 @@
+h1{
+    color:crimson;
+    padding: 20px 0;
+}
+
+a{
+    text-decoration: none;
+    font-size: 20px;
+    color: darkmagenta;
+}
+a:hover{
+    color: crimson;
+}

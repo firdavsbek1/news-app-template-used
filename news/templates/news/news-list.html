@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>News List</title>
+</head>
+<body>
+    <h1>Our News title goes here</h1>
+    {% for each_news in news_list %}
+        <li><a href="{% url 'news-detail' each_news.id %}">{{ each_news.title }}</a></li>
+    {% endfor %}
+</body>
+</html>

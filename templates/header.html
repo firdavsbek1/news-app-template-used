@@ -1,0 +1,28 @@
+{% load static %}
+<header id="header">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="header_top">
+                <div class="header_top_left">
+                    <ul class="top_nav">
+                        <li><a href="{% url 'home-page' %}">Home</a></li>
+                        <li><a href="{% url 'about-page' %}">About</a></li>
+                        <li><a href="{% url 'contact-page' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="header_top_right">
+                    <p>{% now "jS F Y H:i" %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="header_bottom">
+                <div class="logo_area"><a href="{% url 'home-page' %}" class="logo"><img
+                        src='{% static "images/logo.jpg" %}'
+                        alt=""></a></div>
+                {#                    <div class="add_banner"><a href="#"><img src="{% static 'images/addbanner_728x90_V1.jpg' %}" alt=""></a>#}
+                {#                    </div>#}
+            </div>
+        </div>
+    </div>
+</header>
