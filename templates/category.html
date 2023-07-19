@@ -14,8 +14,8 @@
                             <div class="single_post_content">
 {#                                <h2><span>Sports</span></h2>#}
                                 <ul class="spost_nav">
-                                    {% for news in all_news %}
-                                    {% if forloop.counter < news_counter %}
+                                    {% for news in news_list %}
+                                    {% if forloop.counter < category_counter %}
                                         <li>
                                         <div class="media wow fadeInDown"><a href="{{news.get_absolute_url}}"
                                                                              class="media-left"> <img alt=""
@@ -34,8 +34,8 @@
                             <div class="single_post_content">
 {#                                <h2><span>Technology</span></h2>#}
                                 <ul class="spost_nav">
-                                    {% for news in all_news %}
-                                    {% if forloop.counter > news_counter %}
+                                    {% for news in news_list %}
+                                    {% if forloop.counter >= category_counter %}
                                         <li>
                                         <div class="media wow fadeInDown"><a href="{{news.get_absolute_url}}"
                                                                              class="media-left"> <img alt=""

@@ -9,5 +9,8 @@ a{
     color: darkmagenta;
 }
 a:hover{
-    color: blue;
+    color: #0000a0;
 }
+/*a:hover{*/
+/*    color: #6d6d75;*/
+/*}*/

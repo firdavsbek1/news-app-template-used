@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Register
+{% endblock title %}
+{% block style %}
+    #newsSection,#navArea {
+        display:none;
+
+    }
+    .forgot-password{
+        font-size:1.7rem;
+
+    }
+
+    .forgot-password:hover{
+        color:#0088FFF2;
+        text-decoration: #0000A0FF;
+        text-decoration: underline;
+    }
+
+    #forgot-section{
+        text-align:center;
+        margin:5%;
+        font-size:1.4rem;
+        color:#6D6D75FF;
+
+    }
+{% endblock style %}
+
+
+{% block content %}
+   <div class="container" style="margin-top: 30vh;width: 50%;margin-bottom: 12vh;">
+       <form method="post">{% csrf_token %}
+           <h2 style="text-align: center">Register Page</h2>
+        {{ form.as_p }}
+        <button style="height: 40px;width: 100%;border-radius: 5px;" class="btn btn-primary" type="submit">Register</button>
+    </form>
+       <p id="forgot-section"><a class='forgot-password' href="{% url 'password-reset' %}">Forgot Password?</a>&nbsp;Already have an account <a class='forgot-password' href="{% url 'login' %}">Login</a></p>
+
+   </div>
+{% endblock content %}

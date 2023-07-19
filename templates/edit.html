@@ -9,9 +9,11 @@
 {% endblock %}
 
 {% block content %}
-   <div class="container" style="padding:10px 50px;">
+   <div class="container" style="padding:10px 50px;margin-top:45vh;">
    {% if news %}
        <h2>Editing "{{ news.title }}"</h2>
+       {% else %}
+       <h2>Create News</h2>
        {% endif %}
        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
         {{ form.as_p }}
