@@ -1,16 +1,5 @@
-h1{
-    color:crimson;
-    padding: 20px 0;
+.search_field_form{
+    margin-top:1rem;
+    margin-left:5rem;
+    width: 100%;
 }
-
-a{
-    text-decoration: none;
-    font-size: 20px;
-    color: darkmagenta;
-}
-a:hover{
-    color: #0000a0;
-}
-/*a:hover{*/
-/*    color: #6d6d75;*/
-/*}*/

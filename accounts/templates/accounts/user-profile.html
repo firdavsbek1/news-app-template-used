@@ -55,9 +55,9 @@
 									<h4>{{ profile.name }}</h4>
 									<p class="text-secondary mb-1">{{ profile.bio}}</p>
 									<p class="text-muted font-size-sm">{{ profile.location}}</p>
-                                    {% if request.user.profile != profile %}
-									<button class="btn btn-primary">Follow</button>
-									<button class="btn btn-outline-primary">Message</button>
+                                    {% if other_profile %}
+									<button style="border-radius:5px;width: 30%;margin-left: 5px;" class="btn btn-primary">Follow</button>
+									<button style="border-radius:5px;width: 30%;" class="btn btn-outline-primary">Message</button>
                                     {% else %}
                        <a class="btn btn-blue" style="width:250px;border-radius:5px;" href="{% url 'logout' %}"><i style="font-size: 1.6rem" class="fa-solid fa-right-from-bracket fa-1x"></i>&nbsp;Logout</a>
 
@@ -97,7 +97,25 @@
 						<div class="card-body">
 
                             {% for field in form %}
-                                {% if field.name == "profile_image" %}
+                                {% if other_profile %}
+
+                                    {% if field.name != "profile_image" %}
+                                    <div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">{{ field.label|capfirst }}</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+                                    <input type="text" name="{{ field.name }}" value="{{ field.value }}" class = 'form-control' readonly>
+                                    <br>
+								</div>
+							</div>
+
+                                {% endif %}
+
+
+                                {% else %}
+
+                                    {% if field.name == "profile_image" %}
                                     <div class="row mb-3">
 								<div class="col-sm-3">
 									<h6 class="mb-0">{{ field.label|capfirst }}</h6>
@@ -126,12 +144,16 @@
 								</div>
 							</div>
                                 {% endif %}
+
+
+                                {% endif %}
                             {% endfor %}
 
 							<div class="row">
 								<div class="col-sm-3"></div>
 								<div class="col-sm-9 text-secondary" style="text-align: center">
-                                    {% if editable %}
+                                    {% if not other_profile %}
+                                        {% if editable %}
                                         <a class="btn btn-black" style="width:150px;border-radius:5px;margin-right: .9rem;" href="{% url 'user-profile' profile.username %}">Cancel</a>
                                         <input type="submit" style="width:150px;border-radius:5px;margin-right: 110px;" class="btn btn-primary" value="Save Changes">
                                     {% else %}
@@ -139,6 +161,7 @@
                                        <a class="btn btn-danger" style="width:150px;border-radius:5px;margin-right: 110px;" href="{% url 'logout' %}"><i style="font-size: 2rem" class="fa-solid fa-trash fa-1x"></i>&nbsp;Delete</a>
 
                                     {% endif %}
+                                    {% endif  %}
 
 								</div>
 							</div>

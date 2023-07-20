@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load hitcount_tags %}
 {% load static %}
 {% block title %}
-{{ news.title }}
+    {{ news.title }}
 {% endblock title %}
 
 {% block content %}
@@ -17,34 +18,52 @@
                             <li class="active">{{ news.category|capfirst }}</li>
                         </ol>
                         <h1>{{ news.title }}</h1>
-                        <div class="post_commentbox"><a href="#"><i class="fa fa-user"></i>Wpfreeware</a> <span><i
-                                class="fa fa-calendar"></i>{{ news.published_time }}</span> <a href="{% url 'category-news' news.category.name %}"><i class="fa fa-tags"></i>{{ news.category }}</a>
+                        <div class="post_commentbox"><a href="{% url 'user-profile' news.author.username %}"><i class="fa fa-user"></i>{{ news.author.username }}</a> <span><i
+                                class="fa fa-calendar"></i>{{ news.published_time }}</span> <a
+                                href="{% url 'category-news' news.category.name %}"><i
+                                class="fa fa-tags"></i>{{ news.category }}</a>
+                            <span style="margin-left:55%;"><i class="fa-regular fa-eye"></i>{% get_hit_count for news %}</span>
                         </div>
-                        <div class="single_page_content"><img style="width:100%;height: 400px;" class="img-center" src="{{ news.image.url }}"
+                        <div class="single_page_content"><img style="width:100%;height: 400px;" class="img-center"
+                                                              src="{{ news.image.url }}"
                                                               alt="">
-                            <p>{{ news.body|linebreaks}}</p>
-                            <blockquote> "There was no option to interdict just the documents and put him merely in touch with counseling. There was no way to be both kind to [Chelsea] and mindful of the potential for harm to people I had never known and would never know which the situation posed. The reader might think there was some more moderate choice that I overlooked but I looked closely, and no such choice existed," Lamo said in the interview.
+                            <p>{{ news.body|linebreaks }}</p>
+                            <blockquote> "There was no option to interdict just the documents and put him merely in
+                                touch with counseling. There was no way to be both kind to [Chelsea] and mindful of the
+                                potential for harm to people I had never known and would never know which the situation
+                                posed. The reader might think there was some more moderate choice that I overlooked but
+                                I looked closely, and no such choice existed," Lamo said in the interview.
                             </blockquote>
-{#                            <ul>#}
-{#                                #}
-{#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
-{#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
-{#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
-{#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
-{#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
-{#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
-{#                            </ul>#}
-{#                            <h2>This is h2 title</h2>#}
-{#                            <h3>This is h3 title</h3>#}
-{#                            <h4>This is h4 title</h4>#}
-{#                            <h5>This is h5 title</h5>#}
-{#                            <h6>This is h6 Title</h6>#}
-                            {% if request.user.is_staff and request.user.is_authenticated %}
-                            <a href="{% url 'edit-news' news.id %}"><button class="btn btn-primary" style="border-radius: 5px;margin-left:200px;width:100px"><i style="font-size: 2rem" class="fa-solid fa-pen-to-square fa-1x"></i>&nbsp;Edit</button></a>
-                            <a href="{% url 'delete-news' news.id %}"><button class="btn btn-danger" style="border-radius: 5px;margin-left:30px;width: 100px"><i style="font-size: 2rem" class="fa-solid fa-trash fa-1x"></i>&nbsp;Delete</button></a>
+                            {#                            <ul>#}
+                            {#                                #}
+                            {#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
+                            {#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
+                            {#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
+                            {#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
+                            {#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
+                            {#                                <li>Nullam vitae nibh odio, non scelerisque nibh</li>#}
+                            {#                            </ul>#}
+                            {#                            <h2>This is h2 title</h2>#}
+                            {#                            <h3>This is h3 title</h3>#}
+                            {#                            <h4>This is h4 title</h4>#}
+                            {#                            <h5>This is h5 title</h5>#}
+                            {#                            <h6>This is h6 Title</h6>#}
+                            {% if request.user.is_authenticated and request.user.is_staff or news.author == request.user %}
+                                <a href="{% url 'edit-news' news.id %}">
+                                    <button class="btn btn-primary"
+                                            style="border-radius: 5px;margin-left:200px;width:100px"><i
+                                            style="font-size: 2rem" class="fa-solid fa-pen-to-square fa-1x"></i>&nbsp;Edit
+                                    </button>
+                                </a>
+                                <a href="{% url 'delete-news' news.id %}">
+                                    <button class="btn btn-danger"
+                                            style="border-radius: 5px;margin-left:30px;width: 100px"><i
+                                            style="font-size: 2rem" class="fa-solid fa-trash fa-1x"></i>&nbsp;Delete
+                                    </button>
+                                </a>
                             {% endif %}
 
-{#                            <button class="btn btn-primary" style="border-radius: 5p/x"><i class="fa-solid fa-pen-to-square fa-beat fa-2x"></i>Blue Button</button>#}
+                            {#                            <button class="btn btn-primary" style="border-radius: 5p/x"><i class="fa-solid fa-pen-to-square fa-beat fa-2x"></i>Blue Button</button>#}
                         </div>
                         <div class="social_link">
                             <ul class="sociallink_nav">
@@ -59,13 +78,16 @@
                             <h2>Related Post <i class="fa fa-thumbs-o-up"></i></h2>
                             <ul class="spost_nav wow fadeInDown animated">
                                 {% for news_post in latest_news %}
-                                {% if news_post.category == news.category and news_post != news%}
-                                    <li>
-                                    <div class="media"><a class="media-left" href="{{ news_post.get_absolute_url }}"> <img
-                                            src="{{news_post.image.url}}" alt=""> </a>
-                                        <div class="media-body"><a class="catg_title" href="{{ news_post.get_absolute_url }}"> {{ news_post.title}}</a></div>
-                                    </div>
-                                </li>
+                                    {% if news_post.category == news.category and news_post != news %}
+                                        <li>
+                                            <div class="media"><a class="media-left"
+                                                                  href="{{ news_post.get_absolute_url }}"> <img
+                                                    src="{{ news_post.image.url }}" alt=""> </a>
+                                                <div class="media-body"><a class="catg_title"
+                                                                           href="{{ news_post.get_absolute_url }}"> {{ news_post.title }}</a>
+                                                </div>
+                                            </div>
+                                        </li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
@@ -77,11 +99,11 @@
                     class="fa fa-angle-left"></i></span>
                 <div>
                     <h3>City Lights</h3>
-                    <img src="../images/post_img1.jpg" alt=""/></div>
+                    <img src="{% static 'images/post_img1.jpg' %}" alt=""/></div>
             </a> <a class="next" href=""> <span class="icon-wrap"><i class="fa fa-angle-right"></i></span>
                 <div>
                     <h3>Firdavs's Business</h3>
-                    <img src="{% static 'images/josh-appel-NeTPASr-bmQ-unsplash (1).jpg'%}" alt=""/></div>
+                    <img src="{% static 'images/josh-appel-NeTPASr-bmQ-unsplash (1).jpg' %}" alt=""/></div>
             </a></nav>
             <div class="col-lg-4 col-md-4 col-sm-4">
                 <aside class="right_content">
@@ -89,12 +111,15 @@
                         <h2><span>Popular Post</span></h2>
                         <ul class="spost_nav">
                             {% for news in popular_posts %}
-                            <li>
-                                <div class="media wow fadeInDown"><a href="{{ news.get_absolute_url }}" class="media-left"> <img
-                                        alt="" src="{{ news.image.url }}"> </a>
-                                    <div class="media-body"><a href="{{ news.get_absolute_url }}" class="catg_title"> {{ news.title}}</a></div>
-                                </div>
-                            </li>
+                                <li>
+                                    <div class="media wow fadeInDown"><a href="{{ news.get_absolute_url }}"
+                                                                         class="media-left"> <img
+                                            alt="" src="{{ news.image.url }}"> </a>
+                                        <div class="media-body"><a href="{{ news.get_absolute_url }}"
+                                                                   class="catg_title"> {{ news.title }}</a></div>
+                                        <p style="padding-top:.5rem;"><i class="fa-regular fa-eye"></i>&nbsp;{% get_hit_count for news %}</p>
+                                    </div>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -110,13 +135,9 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="category">
                                 <ul>
-                                    <li class="cat-item"><a href="#">Sports</a></li>
-                                    <li class="cat-item"><a href="#">Fashion</a></li>
-                                    <li class="cat-item"><a href="#">Business</a></li>
-                                    <li class="cat-item"><a href="#">Technology</a></li>
-                                    <li class="cat-item"><a href="#">Games</a></li>
-                                    <li class="cat-item"><a href="#">Life &amp; Style</a></li>
-                                    <li class="cat-item"><a href="#">Photography</a></li>
+                                    {% for category in category_list %}
+                                    <li class="cat-item"><a href="{% url 'category-news' category.name %}">{{ category.name|capfirst }}</a></li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="video">
@@ -128,60 +149,73 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="comments">
                                 <ul class="spost_nav">
-                                    <li>
-                                        <div class="media wow fadeInDown"><a href="single_page.html" class="media-left">
-                                            <img alt="" src="../images/post_img1.jpg"> </a>
-                                            <div class="media-body"><a href="single_page.html" class="catg_title">
-                                                Aliquam malesuada diam eget turpis varius 1</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media wow fadeInDown"><a href="single_page.html" class="media-left">
-                                            <img alt="" src="../images/post_img2.jpg"> </a>
-                                            <div class="media-body"><a href="single_page.html" class="catg_title">
-                                                Aliquam malesuada diam eget turpis varius 2</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media wow fadeInDown"><a href="single_page.html" class="media-left">
-                                            <img alt="" src="../images/post_img1.jpg"> </a>
-                                            <div class="media-body"><a href="single_page.html" class="catg_title">
-                                                Aliquam malesuada diam eget turpis varius 3</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media wow fadeInDown"><a href="single_page.html" class="media-left">
-                                            <img alt="" src="../images/post_img2.jpg"> </a>
-                                            <div class="media-body"><a href="single_page.html" class="catg_title">
-                                                Aliquam malesuada diam eget turpis varius 4</a></div>
-                                        </div>
-                                    </li>
+                                    {% if request.user.is_authenticated %}
+                                        <li>
+                                                <form  method="post">{% csrf_token %}
+{#                                                    <input type="text" style="width: 100%;height: 6rem;" name="{{ review_form.body.name }}" placeholder="Make a review" class="form-control">#}
+{#                                                    <textarea rows="3" cols="50" style="width: 100%;height: 6rem;" name="{{ review_form.body.name }}" placeholder="Make a review" class="form-control">#}
+                                                    <textarea name="body" id="" cols="30" rows="2" placeholder="Make a review" class="form-control"></textarea>
+                                                    <button style="border-radius: 5px;margin-top:5px;"
+                                                            class="btn btn-primary" type="submit">Comment
+                                                    </button>
+                                                    {% if reviews_count %}
+                                          <h5 class="text-muted">{{ reviews_count }} Comment{{ reviews_count|pluralize }}</h5>
+                                                        {% else %}
+                                                        <h5 class="text-muted">No Comment</h5>
+                                                        {% endif %}
+                                                </form>
+                                        </li>
+                                        {% else %}
+                                        <li>   <a style="border-radius: 5px;margin-top:5px;width: 100%"
+                                                            class="btn btn-danger" href="{% url "login" %}">Login to Make Review
+                                                    </a>
+                                        </li>
+                                        <br>
+                                    {% endif %}
+                                    {% for review in reviews %}
+                                        <li>
+                                            <div class="media wow fadeInDown"><a
+                                                    href="{% url 'user-profile' review.user.username %}"
+                                                    class="media-left">
+                                                <img class="img-rounded" alt=""
+                                                     src="{{ review.user.profile.profile_image.url }}"> </a>
+                                                <div class="media-body"><a class="primary"
+                                                                           href="{% url 'user-profile' review.user.username %}">{{ review.user.username }}:</a><a
+                                                        href="" class="catg_title">
+
+                                                    <p
+                                                            style="font-size: 1.3rem;display: inline-block">
+                                                        "{{ review.body|truncatechars:100 }}"</p>
+                                                </a></div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="single_sidebar wow fadeInDown">
                         <h2><span>Sponsor</span></h2>
-                        <a class="sideAdd" href="#"><img src="../images/add_img.jpg" alt=""></a></div>
-                    <div class="single_sidebar wow fadeInDown">
-                        <h2><span>Category Archive</span></h2>
-                        <select class="catgArchive">
-                            <option>Select Category</option>
-                            <option>Life styles</option>
-                            <option>Sports</option>
-                            <option>Technology</option>
-                            <option>Treads</option>
-                        </select>
-                    </div>
-                    <div class="single_sidebar wow fadeInDown">
-                        <h2><span>Links</span></h2>
-                        <ul>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Rss Feed</a></li>
-                            <li><a href="#">Login</a></li>
-                            <li><a href="#">Life &amp; Style</a></li>
-                        </ul>
-                    </div>
+                        <a class="sideAdd" href="#"><img src="{% static 'images/swansway-motor-group-O6Oe_Bok_2I-unsplash (1).jpg' %}" alt=""></a></div>
+{#                    <div class="single_sidebar wow fadeInDown">#}
+{#                        <h2><span>Category Archive</span></h2>#}
+{#                        <select class="catgArchive">#}
+{#                            <option>Select Category</option>#}
+{#                            <option>Life styles</option>#}
+{#                            <option>Sports</option>#}
+{#                            <option>Technology</option>#}
+{#                            <option>Treads</option>#}
+{#                        </select>#}
+{#                    </div>#}
+{#                    <div class="single_sidebar wow fadeInDown">#}
+{#                        <h2><span>Links</span></h2>#}
+{#                        <ul>#}
+{#                            <li><a href="#">Blog</a></li>#}
+{#                            <li><a href="#">Rss Feed</a></li>#}
+{#                            <li><a href="#">Login</a></li>#}
+{#                            <li><a href="#">Life &amp; Style</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
                 </aside>
             </div>
         </div>

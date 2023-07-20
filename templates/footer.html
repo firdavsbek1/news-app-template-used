@@ -12,7 +12,7 @@
                     <h2>Tag</h2>
                     <ul class="tag_nav">
                         {% for category in category_list  %}
-                        <li><a href="#">{{ category.name }}</a></li>
+                        <li><a href="{% url 'category-news' category.name %}">{{ category.name }}</a></li>
                         {% endfor %}
                         <li><a href="#">Slider</a></li>
                     </ul>
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="footer_bottom">
-        <p class="copyright">Copyright &copy; 2045 <a href="{% url 'home-page' %}">NewsFeed</a></p>
-        <p class="developer">Developed By Wpfreeware</p>
+        <p class="copyright">Copyright &copy; {% now "Y" %} <a href="{% url 'home-page' %}">NewsFeed</a></p>
+        <p style="text-align: right;" class="copyright">Credits to Wpfreeware</p>
     </div>
 </footer>

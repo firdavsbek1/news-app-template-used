@@ -1,5 +1,6 @@
 {% extends 'base.html'%}
 {% load static %}
+{% load hitcount_tags %}
 {% block title %}
     {{ category|capfirst }}
 {% endblock title %}
@@ -22,7 +23,9 @@
                                                                                                       src="{{ news.image.url}}">
                                         </a>
                                             <div class="media-body"><a href="{{news.get_absolute_url}}" class="catg_title">
-                                                {{ news.title}}</a></div>
+                                                {{ news.title}}</a>
+                                            <p ><i class="fa-regular fa-eye"></i>&nbsp;{% get_hit_count for news %}</p>
+                                            </div>
                                         </div>
                                     </li>
                                         {% endif %}
@@ -42,7 +45,9 @@
                                                                                                       src="{{ news.image.url }}">
                                         </a>
                                             <div class="media-body"><a href="{{news.get_absolute_url}}" class="catg_title">
-                                                {{ news.title}}</a></div>
+                                                {{ news.title}}</a>
+                                            <p ><i class="fa-regular fa-eye"></i>&nbsp;{% get_hit_count for news %}</p>
+                                            </div>
                                         </div>
                                     </li>
                                         {% endif %}
@@ -63,7 +68,9 @@
                                 <div class="media wow fadeInDown"><a href="{{news.get_absolute_url}}" class="media-left">
                                     <img alt="" src="{{ news.image.url }}"> </a>
                                     <div class="media-body"><a href="{{news.get_absolute_url}}" class="catg_title">
-                                        {{ news.title}}</a></div>
+                                        {{ news.title}}</a>
+                                    <p ><i class="fa-regular fa-eye"></i>&nbsp;{% get_hit_count for news %}</p>
+                                    </div>
                                 </div>
                             </li>
                             {% endfor %}
@@ -97,16 +104,23 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="comments">
                                 <ul class="spost_nav">
-                                    {% for news in sports_news %}
-                                    <li>
-                                        <div class="media wow fadeInDown"><a href="{{news.get_absolute_url}}"
-                                                                             class="media-left"> <img alt=""
-                                                                                                      src="images/post_img1.jpg">
-                                        </a>
-                                            <div class="media-body"><a href="{{news.get_absolute_url}}" class="catg_title">
-                                                Aliquam malesuada diam eget turpis varius 1</a></div>
-                                        </div>
-                                    </li>
+                                    {% for review in reviews_all %}
+                                        <li>
+                                            <div class="media wow fadeInDown"><a
+                                                    href="{% url 'user-profile' review.user.username %}"
+                                                    class="media-left">
+                                                <img class="img-rounded" alt=""
+                                                     src="{{ review.user.profile.profile_image.url }}"> </a>
+                                                <div class="media-body"><a class="primary"
+                                                                           href="{% url 'user-profile' review.user.username %}">{{ review.user.username }}:</a><a
+                                                        href="" class="catg_title">
+
+                                                    <p
+                                                            style="font-size: 1.3rem;display: inline-block">
+                                                        "{{ review.body|truncatechars:100 }}"</p>
+                                                </a></div>
+                                            </div>
+                                        </li>
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -114,25 +128,25 @@
                     </div>
                     <div class="single_sidebar wow fadeInDown">
                         <h2><span>Sponsor</span></h2>
-                        <a class="sideAdd" href="#"><img src="images/add_img.jpg" alt=""></a></div>
-                    <div class="single_sidebar wow fadeInDown">
-                        <h2><span>Category Archive</span></h2>
-                        <select class="catgArchive">
-                            <option>Select Category</option>
-                            {% for category in category_list %}
-                            <option>{{ category.name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="single_sidebar wow fadeInDown">
-                        <h2><span>Links</span></h2>
-                        <ul>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Rss Feed</a></li>
-                            <li><a href="#">Login</a></li>
-                            <li><a href="#">Life &amp; Style</a></li>
-                        </ul>
-                    </div>
+                        <a class="sideAdd" href="#"><img src="{% static 'images/swansway-motor-group-O6Oe_Bok_2I-unsplash (1).jpg ' %}" alt=""></a></div>
+{#                    <div class="single_sidebar wow fadeInDown">#}
+{#                        <h2><span>Category Archive</span></h2>#}
+{#                        <select class="catgArchive">#}
+{#                            <option>Select Category</option>#}
+{#                            {% for category in category_list %}#}
+{#                            <option>{{ category.name}}</option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </div>#}
+{#                    <div class="single_sidebar wow fadeInDown">#}
+{#                        <h2><span>Links</span></h2>#}
+{#                        <ul>#}
+{#                            <li><a href="#">Blog</a></li>#}
+{#                            <li><a href="#">Rss Feed</a></li>#}
+{#                            <li><a href="#">Login</a></li>#}
+{#                            <li><a href="#">Life &amp; Style</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
                 </aside>
             </div>
         </div>

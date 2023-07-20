@@ -28,6 +28,14 @@
 {#                <li><a href="#">Tablets</a></li>#}
                 <li><a href="{% url 'contact-page' %}">Contact Us</a></li>
                 <li><a href="{% url 'not-found' %}">404 Page</a></li>
+                <li style="margin-left:5rem;">
+                    <form method="get" class="search_field_form" action="{% url 'search-news' %}" >
+                        <div class="form-control">
+                                                    <label for="search_field"><i class="fa-sharp fa-solid fa-magnifying-glass"></i></label><input style="border:none;outline:none;padding-left:.5rem;" id="search_field" type="text" placeholder="Search News..." name="q">
+
+                        </div>
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>
@@ -38,7 +46,7 @@
             <div class="latest_newsarea"><span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
                     {% for news in latest_news %}
-                    <li><a href="#"><img src="{{ news.image.url }}" alt="">{{ news.title}}</a></li>
+                    <li><a href="{% url 'news-detail' news.slug %}"><img src="{{ news.image.url }}" alt="">{{ news.title}}</a></li>
                     {% endfor %}
                 </ul>
                 <div class="social_area">

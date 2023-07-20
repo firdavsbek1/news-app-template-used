@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -21,6 +22,7 @@ class News(models.Model):
         draft_paper = "D", "Draft"
         ready_paper = "R", "Ready"
 
+    author=models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     title = models.CharField(max_length=300)
     slug = models.SlugField(max_length=300)
     body = models.TextField()
@@ -56,3 +58,14 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class Review(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='reviews')
+    news = models.ForeignKey(News,on_delete=models.CASCADE,related_name='reviews')
+    body=models.TextField()
+    active=models.BooleanField(default=True)
+    created_time=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.body[:20]

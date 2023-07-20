@@ -1,33 +1,16 @@
-import math
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
+from django.contrib.auth.decorators import login_required, user_passes_test
+import math
+from django.db.models import Q
 
+from django.urls import reverse, reverse_lazy
 from .models import News, Category
 from django.views import generic
-from .forms import ContactModelForm, NewsModelForm
+from .forms import ContactModelForm, NewsModelForm, ReviewForm
 from .custom_permission import IsAdminOrReadOnly
-
-
-# def news_list(request):
-#     # news_list_all=News.objects.all()
-#     news_list_all=News.ready.all()
-#     return render(request,'news/news-list.html',{'news_list':news_list_all})
-#
-#
-# def news_detail(request,pk):
-#     news_object = get_object_or_404(News,id=pk,status=News.Choice.ready_paper)
-#     return render(request,'news/news-detail.html',{'news':news_object})
-
-
-# def home_page(request):
-#     news = News.ready.all().order_by("-published_time")
-#     context={
-#         'news_list':news,
-#     }
-#     return render(request, 'news_list.html', context)
+from hitcount.models import HitCount
+from hitcount.views import HitCountMixin,HitCountDetailView
 
 
 class HomePageView(generic.ListView):
@@ -41,8 +24,12 @@ class HomePageView(generic.ListView):
         context['crime_news'] = News.ready.all().filter(category__name='crime')[:5]
         context['tech_news'] = News.ready.all().filter(category__name='technology')[:5]
         context['sports_news'] = News.ready.all().filter(category__name='sports')[:5]
-        context['sliders'] = News.ready.all().order_by('-published_time')[:4]
+        context['sliders'] = News.ready.all().order_by('-published_time')[:10]
         return context
+
+
+def about_page(request):
+    return render(request, 'about.html')
 
 
 def show_category(request, category):
@@ -50,14 +37,10 @@ def show_category(request, category):
     return render(request, 'category.html',
                   context={"news_list": news_list,
                            "category": category,
-                           "category_counter": math.ceil(len(news_list)/2)+1})
+                           "category_counter": math.ceil(len(news_list) / 2) + 1})
 
 
-def about_page(request):
-    return render(request, 'about.html')
-
-
-@login_required
+@login_required()
 def delete_news(request, id):
     news_item = News.objects.get(id=id)
     if request.method == "POST":
@@ -69,7 +52,7 @@ def delete_news(request, id):
     return render(request, 'delete.html', context)
 
 
-@login_required
+@login_required()
 def edit_news(request, id):
     news_item = News.objects.get(id=id)
     if request.method == "POST":
@@ -95,6 +78,12 @@ def contact_page(request):
     return render(request, 'contact.html')
 
 
+@user_passes_test(lambda user: user.is_superuser)
+def admin_page(request):
+    admin_users = User.objects.filter(is_superuser=True)
+    return render(request, 'admin.html', {'users': admin_users})
+
+
 def not_found_page(request):
     return render(request, '404.html')
 
@@ -108,11 +97,31 @@ class NewsListView(generic.ListView):
         return super().get_queryset().filter(status=News.Choice.ready_paper)
 
 
-class NewsDetailView(generic.DetailView):
+class NewsDetailView(HitCountDetailView):
     model = News
     template_name = 'single_page.html'
     context_object_name = 'news'
     pk_url_kwargs = 'slug'
+    count_hit = True
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['reviews'] = self.get_object().reviews.filter(active=True)
+        context_data['reviews_count'] = context_data['reviews'].count()
+        return context_data
+
+    def post(self, request, *args, **kwargs):
+        news = self.get_object()
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            new_review = review_form.save(commit=False)
+            new_review.user = request.user
+            new_review.news = news
+            new_review.save()
+        return render(request, self.template_name,context={"news":news,
+                                                           'reviews': news.reviews.filter(active=True),
+                                                           'reviews_count':self.get_object().reviews.filter(active=True).count()
+                                                           })
 
 
 class NewUpdateView(IsAdminOrReadOnly, generic.UpdateView):
@@ -120,6 +129,14 @@ class NewUpdateView(IsAdminOrReadOnly, generic.UpdateView):
     template_name = 'edit.html'
     context_object_name = 'news'
     form_class = NewsModelForm
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object.author = self.request.user
+        self.object.save()
+        return super().post(request,*args,**kwargs)
 
 
 class NewsDeleteView(IsAdminOrReadOnly, generic.DeleteView):
@@ -133,3 +150,59 @@ class NewsCreateView(IsAdminOrReadOnly, generic.CreateView):
     model = News
     template_name = 'edit.html'
     form_class = NewsModelForm
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object.author = self.request.user
+        self.object.save()
+        return super().post(request,*args,**kwargs)
+
+
+class NewsSearchView(generic.ListView):
+    model = News
+    template_name = 'category.html'
+    context_object_name = 'news_list'
+
+    def get_queryset(self, *args, **kwargs):
+        search_query = self.request.GET.get('q')
+        return News.ready.filter(
+            Q(title__icontains=search_query) | Q(body__icontains=search_query) | Q(category__name=search_query))
+
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data['category'] = "Search Page"
+        context_data['category_counter'] = math.ceil(len(self.get_queryset()) / 2) + 1
+        return context_data
+
+# def news_list(request):
+#     # news_list_all=News.objects.all()
+#     news_list_all=News.ready.all()
+#     return render(request,'news/news-list.html',{'news_list':news_list_all})
+#
+#
+
+
+def news_detail(request,slug):
+    context={}
+    news_object = get_object_or_404(News,slug=slug,status=News.Choice.ready_paper)
+    hit_count_object=HitCount.objects.get_for_object(news_object)
+    hits=hit_count_object.hits
+    context['hitcount']={'pk':hit_count_object.pk}
+    hit_response=HitCountMixin.hit_count(request,hit_count_object)
+    if hit_response.hit_counted:
+        hits+=1
+        context['hitcount']['hit_counted']=hit_response.hit_counted
+        context['hitcount']['hit_message']=hit_response.hit_message
+    context['hitcount']['total_hits']=hits
+    context['news']=news_object
+    return render(request,'single_page.html',context)
+
+
+# def home_page(request):
+#     news = News.ready.all().order_by("-published_time")
+#     context={
+#         'news_list':news,
+#     }
+#     return render(request, 'news_list.html', context)
