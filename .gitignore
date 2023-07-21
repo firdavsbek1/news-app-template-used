@@ -1,4 +1,3 @@
-db.sqlite3
 Pipfile
 Pipfile.lock
 __pycache__/
@@ -19,8 +18,7 @@ Icon
 *.py[cod]
 
 media
-news
-
+static
 # Distribution / packaging
 .Python
 env/
