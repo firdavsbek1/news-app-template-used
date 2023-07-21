@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% load hitcount_tags %}
 {% block title %}
-    NewsFeed
+    {% blocktrans %}NewsFeed{% endblocktrans %}
 {% endblock title %}
 
 {% block content %}
@@ -15,7 +16,7 @@
                         <div class="single_iteam"><a href="{{news.get_absolute_url}}"> <img src="{{ news.image.url }}"
                                                                                          alt=""></a>
                             <div class="slider_article">
-                                <h2><a class="slider_tittle" href="{{news.get_absolute_url}}">{{ news.title}}lkjsjf</a></h2>
+                                <h2><a class="slider_tittle" href="{{news.get_absolute_url}}">{{ news.title}}</a></h2>
                                 <p>{{ news.body|slice:'150'}}...</p>
                             </div>
                         </div>
@@ -25,7 +26,7 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4" style="overflow: hidden">
                 <div class="latest_post">
-                    <h2><span>Latest post</span></h2>
+                    <h2><span> {% blocktrans %}Latest post{% endblocktrans %}</span></h2>
                     <div class="latest_post_container">
                         <div id="prev-button"><i class="fa fa-chevron-up"></i></div>
                         <ul class="latest_postnav">
@@ -55,7 +56,7 @@
             <div class="col-lg-8 col-md-8 col-sm-8">
                 <div class="left_content">
                     <div class="single_post_content">
-                        <h2><span>Business</span></h2>
+                        <h2><span>{% blocktrans %}Business{% endblocktrans %}</span></h2>
                         <div class="single_post_content_left">
                             <ul class="business_catgnav  wow fadeInDown">
                             {% for news in business_news %}
@@ -97,7 +98,7 @@
                     <div class="fashion_technology_area">
                         <div class="fashion">
                             <div class="single_post_content">
-                                <h2><span>Sports</span></h2>
+                                <h2><span>{% blocktrans %}Sports{% endblocktrans %}</span></h2>
                                 <ul class="business_catgnav wow fadeInDown">
                                     {% for news in sports_news %}
                                     {% if forloop.first%}
@@ -136,7 +137,7 @@
                         </div>
                         <div class="technology">
                             <div class="single_post_content">
-                                <h2><span>Technology</span></h2>
+                                <h2><span>{% blocktrans %}Technology{% endblocktrans %}</span></h2>
                                 <ul class="business_catgnav">
                                     {% for news in tech_news %}
                                         {% if forloop.first %}
@@ -176,7 +177,7 @@
                         </div>
                     </div>
                     <div class="single_post_content">
-                        <h2><span>Photography</span></h2>
+                        <h2><span>{% blocktrans %}Photography{% endblocktrans %}</span></h2>
                         <ul class="photograph_nav  wow fadeInDown">
                             <li>
                                 <div class="photo_grid">
@@ -235,7 +236,7 @@
                         </ul>
                     </div>
                     <div class="single_post_content">
-                        <h2><span>Crime & Suicide</span></h2>
+                        <h2><span>{% blocktrans %}Crime & Suicide{% endblocktrans %}</span></h2>
                         <div class="single_post_content_left">
                             <ul class="business_catgnav">
                                 {% for news in crime_news %}
@@ -280,7 +281,7 @@
             <div class="col-lg-4 col-md-4 col-sm-4">
                 <aside class="right_content">
                     <div class="single_sidebar">
-                        <h2><span>Popular Post</span></h2>
+                        <h2><span>{% blocktrans %}Popular Post{% endblocktrans %}</span></h2>
                         <ul class="spost_nav">
                             {% for news in sliders %}
                             <li>
@@ -346,7 +347,7 @@
                         </div>
                     </div>
                     <div class="single_sidebar wow fadeInDown">
-                        <h2><span>Sponsor</span></h2>
+                        <h2><span>{% blocktrans %}Sponsor{% endblocktrans %}</span></h2>
                         <a class="sideAdd" href="#"><img src="{% static 'images/swansway-motor-group-O6Oe_Bok_2I-unsplash (1).jpg' %}" alt=""></a></div>
 {#                    <div class="single_sidebar wow fadeInDown">#}
 {#                        <h2><span>Category Archive</span></h2>#}

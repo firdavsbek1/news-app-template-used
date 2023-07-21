@@ -3,6 +3,9 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from slugify import slugify
+from googletrans import Translator
+
+translator=Translator()
 
 
 class ReadyManager(models.Manager):
@@ -22,7 +25,7 @@ class News(models.Model):
         draft_paper = "D", "Draft"
         ready_paper = "R", "Ready"
 
-    author=models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    author=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     title = models.CharField(max_length=300)
     slug = models.SlugField(max_length=300)
     body = models.TextField()
@@ -37,6 +40,10 @@ class News(models.Model):
         return self.title
 
     def save(self,*args,**kwargs):
+        self.title_uz=translator.translate(self.title,dest='uz',src='en').text
+        self.title_ru=translator.translate(self.title,dest='ru',src='en').text
+        self.body_uz=translator.translate(self.body,dest='uz',src='en').text
+        self.body_ru=translator.translate(self.body,dest='ru',src='en').text
         self.slug=slugify(self.title)
         return super().save(*args,**kwargs)
 

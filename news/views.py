@@ -3,9 +3,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 import math
 from django.db.models import Q
-
-from django.urls import reverse, reverse_lazy
-from .models import News, Category
+from django.urls import reverse_lazy
+from .models import News
 from django.views import generic
 from .forms import ContactModelForm, NewsModelForm, ReviewForm
 from .custom_permission import IsAdminOrReadOnly
@@ -133,11 +132,6 @@ class NewUpdateView(IsAdminOrReadOnly, generic.UpdateView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
 
-    def post(self, request, *args, **kwargs):
-        self.object.author = self.request.user
-        self.object.save()
-        return super().post(request,*args,**kwargs)
-
 
 class NewsDeleteView(IsAdminOrReadOnly, generic.DeleteView):
     model = News
@@ -151,13 +145,9 @@ class NewsCreateView(IsAdminOrReadOnly, generic.CreateView):
     template_name = 'edit.html'
     form_class = NewsModelForm
 
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object.author = self.request.user
-        self.object.save()
-        return super().post(request,*args,**kwargs)
+    def form_valid(self, form):
+        form.instance.author=self.request.user
+        return super().form_valid(form)
 
 
 class NewsSearchView(generic.ListView):

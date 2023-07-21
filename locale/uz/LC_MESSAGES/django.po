@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-21 10:52+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\django_project\settings.py:143
+msgid "Uzbek"
+msgstr "O'zbekcha"
+
+#: .\django_project\settings.py:144
+msgid "English"
+msgstr "Inglizcha"
+
+#: .\django_project\settings.py:145
+msgid "Russian"
+msgstr "Ruscha"
+
+#: .\templates\news_list.html:6
+msgid "NewsFeed"
+msgstr "NewsFeed"
+
+#: .\templates\news_list.html:29
+msgid "Latest post"
+msgstr "So'ngi Yangiliklar"
+
+#: .\templates\news_list.html:59
+msgid "Business"
+msgstr "Biznes"
+
+#: .\templates\news_list.html:101
+msgid "Sports"
+msgstr "Sport"
+
+#: .\templates\news_list.html:140
+msgid "Technology"
+msgstr "Texnologiya"
+
+#: .\templates\news_list.html:180
+msgid "Photography"
+msgstr "Rasmlar"
+
+#: .\templates\news_list.html:239
+msgid "Crime & Suicide"
+msgstr "Jinoya & Jazo"
+
+#: .\templates\news_list.html:284
+msgid "Popular Post"
+msgstr "Ommabop Yangilik"
+
+#: .\templates\news_list.html:350
+msgid "Sponsor"
+msgstr "Homiy"
